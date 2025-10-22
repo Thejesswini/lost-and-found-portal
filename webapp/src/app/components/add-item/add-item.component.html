@@ -1,0 +1,31 @@
+<div class="add-item-container">
+  <form (ngSubmit)="addItem()">
+    <input type="text" [(ngModel)]="item.itemid" name="itemid" placeholder="Item ID" required />
+    <input type="text" [(ngModel)]="item.description" name="description" placeholder="Description" required />
+    <input type="text" [(ngModel)]="item.location" name="location" placeholder="Location" required />
+    <input type="text" [(ngModel)]="item.tag" name="tag" placeholder="Tag" />
+    <input type="date" [(ngModel)]="item.dateLost" name="dateLost" />
+    
+    <select [(ngModel)]="item.status" name="status">
+      <option value="lost">Lost</option>
+      <option value="found">Found</option>
+      <option value="found and returned">Found & Returned</option>
+    </select>
+
+    <label class="checkbox-label">
+      <input type="checkbox" [(ngModel)]="item.autofill" name="autofill" /> Autofill
+    </label>
+
+    <input type="text" [(ngModel)]="item.contact" name="contact" placeholder="Contact" />
+    <input type="text" [(ngModel)]="item.additionalContact" name="additionalContact" placeholder="Additional Contact" />
+
+    <input type="file" (change)="onImageSelected($event)" multiple />
+
+    <!-- Image previews -->
+    <div class="image-preview" *ngIf="imagePreviews.length > 0">
+      <img *ngFor="let img of imagePreviews" [src]="img" alt="preview" />
+    </div>
+
+    <button type="submit">Add Item</button>
+  </form>
+</div>
