@@ -39,6 +39,50 @@ const itemSchema = new mongoose.Schema({
 
 const Item = mongoose.model('Item', itemSchema);
 
+// ✅ READ - Get all items
+app.get('/api/items', async (req, res) => {
+  try {
+    console.log('GET /api/items called');
+    const items = await Item.find();
+    console.log('Items found:', items.length);
+    res.json(items);
+  } catch (error) {
+    console.error('Error fetching items:', error);
+    res.status(500).json({ message: 'Error fetching items', error });
+  }
+});
+
+// ✅ CREATE - Add new item with images
+// `upload.array('images')` handles multiple file uploads with field name "images"
+app.post('/api/items', upload.array('images'), async (req, res) => {
+  try {
+    console.log('POST /api/items called');
+
+    // Convert uploaded images to base64
+    const imageBase64 = req.files && req.files.length > 0
+  ? req.files.map(file => file.buffer.toString('base64'))
+  : [];
+
+
+    const itemData = {
+      ...req.body,
+      images: imageBase64,
+      dateLost: req.body.dateLost ? new Date(req.body.dateLost) : null,
+      autofill: req.body.autofill === 'true' || false
+    };
+
+    console.log('Item data to save:', itemData);
+
+    const item = new Item(itemData);
+    const savedItem = await item.save();
+
+    console.log('Item saved to MongoDB:', savedItem);
+    res.status(201).json(savedItem);
+  } catch (error) {
+    console.error('Error adding item:', error);
+    res.status(500).json({ message: 'Error adding item', error });
+  }
+});
 
 // UPDATE - Change item details only
 app.put('/api/items/:id', async (req, res) => {
