@@ -1,6 +1,6 @@
-<div class="add-item-container">
-  <form (ngSubmit)="addItem()">
-    
+<div class="update-item-container">
+  <form (ngSubmit)="updateItem()">
+
     <input type="text" [(ngModel)]="item.description" name="description" placeholder="Description" required />
     <input type="text" [(ngModel)]="item.location" name="location" placeholder="Location" required />
     <input type="text" [(ngModel)]="item.tag" name="tag" placeholder="Tag" />
@@ -26,6 +26,10 @@
       <img *ngFor="let img of imagePreviews" [src]="img" alt="preview" />
     </div>
 
-    <button type="submit">Add Item</button>
+    <!-- Update button with pen icon -->
+    <button type="submit">
+      <i class="fa-solid fa-pen"></i> Update Item
+    </button>
+
   </form>
 </div>
