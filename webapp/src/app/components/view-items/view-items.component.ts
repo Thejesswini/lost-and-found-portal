@@ -1,13 +1,21 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ItemService } from '../../services/item.service';
+import { UpdateItemComponent } from '../update-item/update-item.component';
+import { DeleteItemComponent } from '../delete-items/delete-items.component';
 
 @Component({
   selector: 'app-view-items',
   templateUrl: './view-items.component.html',
   styleUrls: ['./view-items.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [
+    CommonModule,
+    FormsModule,
+    UpdateItemComponent,
+    DeleteItemComponent
+  ]
 })
 export class ViewItemsComponent {
   items: any[] = [];
@@ -24,4 +32,3 @@ export class ViewItemsComponent {
     });
   }
 }
-
