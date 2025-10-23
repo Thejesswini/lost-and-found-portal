@@ -39,51 +39,38 @@ const itemSchema = new mongoose.Schema({
 
 const Item = mongoose.model('Item', itemSchema);
 
-// ✅ READ - Get all items
-app.get('/api/items', async (req, res) => {
+
+// UPDATE - Change item details only
+app.put('/api/items/:id', async (req, res) => {
+  const { id } = req.params;
+
   try {
-    console.log('GET /api/items called');
-    const items = await Item.find();
-    console.log('Items found:', items.length);
-    res.json(items);
+    const updatedData = { ...req.body };
+
+    // Optional: convert dateLost to Date object if provided
+    if (req.body.dateLost) updatedData.dateLost = new Date(req.body.dateLost);
+
+    const updatedItem = await Item.findByIdAndUpdate(id, updatedData, { new: true });
+    if (!updatedItem) return res.status(404).json({ message: 'Item not found' });
+
+    res.json(updatedItem);
   } catch (error) {
-    console.error('Error fetching items:', error);
-    res.status(500).json({ message: 'Error fetching items', error });
+    res.status(500).json({ message: 'Error updating item', error });
   }
 });
 
-// ✅ CREATE - Add new item with images
-// `upload.array('images')` handles multiple file uploads with field name "images"
-app.post('/api/items', upload.array('images'), async (req, res) => {
+// DELETE - Remove item by ID
+app.delete('/api/items/:id', async (req, res) => {
+  const { id } = req.params;
   try {
-    console.log('POST /api/items called');
+    const deletedItem = await Item.findByIdAndDelete(id);
+    if (!deletedItem) return res.status(404).json({ message: 'Item not found' });
 
-    // Convert uploaded images to base64
-    const imageBase64 = req.files && req.files.length > 0
-  ? req.files.map(file => file.buffer.toString('base64'))
-  : [];
-
-
-    const itemData = {
-      ...req.body,
-      images: imageBase64,
-      dateLost: req.body.dateLost ? new Date(req.body.dateLost) : null,
-      autofill: req.body.autofill === 'true' || false
-    };
-
-    console.log('Item data to save:', itemData);
-
-    const item = new Item(itemData);
-    const savedItem = await item.save();
-
-    console.log('Item saved to MongoDB:', savedItem);
-    res.status(201).json(savedItem);
+    res.json({ message: 'Item deleted successfully' });
   } catch (error) {
-    console.error('Error adding item:', error);
-    res.status(500).json({ message: 'Error adding item', error });
+    res.status(500).json({ message: 'Error deleting item', error });
   }
 });
-
 // Default route
 app.get('/', (req, res) => res.send('Backend is running!'));
 
