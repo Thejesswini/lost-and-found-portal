@@ -1,0 +1,11 @@
+<div class="delete-item-container">
+  <h3>Delete Item</h3>
+  <form (ngSubmit)="deleteItem()">
+    
+    <input type="text" [(ngModel)]="itemId" name="itemId" placeholder="Item ID" required />
+
+    <button type="submit" class="delete-btn">
+      <i class="fa-solid fa-trash"></i> Delete Item
+    </button>
+  </form>
+</div>
