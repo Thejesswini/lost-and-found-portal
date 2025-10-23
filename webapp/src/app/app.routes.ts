@@ -4,7 +4,7 @@ import { Login } from './components/login/login';
 import { authGuard } from './core/auth-guard';
 
 export const routes: Routes = [
-    
+
     {
         path:"register",
         component:Register

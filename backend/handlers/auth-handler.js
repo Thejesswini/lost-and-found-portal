@@ -12,6 +12,17 @@ async function registerUser(model){
         password:hashPassword
     })
     await user.save();
+
+    const token = jwt.sign({
+            id:user._id,
+            name:model.name,
+            email:model.email,
+        }, "secret",
+        {
+            expiresIn: "1h",
+        }
+    );
+    return {token, user};
 }
 
 async function loginUser(model){

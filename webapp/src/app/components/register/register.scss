@@ -13,7 +13,7 @@ $dark-text: #2b2d42;
 
 html, body {
   height: 100%;
-  width: 100%;
+  
 }
 
 body {
@@ -21,10 +21,17 @@ body {
   background: linear-gradient(135deg, $red, $orange);
   display: flex;
   align-items: center;
+  width: 100%;
   justify-content: center;
   min-height: 100vh;
 }
 
+.register-box {
+  margin-top: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .register-container {
   background-color: $light-bg;
   padding: 2.5rem;
