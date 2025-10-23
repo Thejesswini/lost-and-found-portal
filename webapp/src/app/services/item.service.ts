@@ -10,6 +10,11 @@ export class ItemService {
 
   constructor(private http: HttpClient) {}
 
+  
+  addItem(item: any): Observable<any> {
+    return this.http.post(this.baseUrl, item);
+  }
+
   // Update an item by ID
   updateItem(itemId: string, updatedItem: any): Observable<any> {
     return this.http.put(`${this.baseUrl}/${itemId}`, updatedItem);
