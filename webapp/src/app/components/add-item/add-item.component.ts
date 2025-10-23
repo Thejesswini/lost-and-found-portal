@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ItemService } from '../../services/item.service';
+import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-add-item',
   templateUrl: './add-item.component.html',
   styleUrls: ['./add-item.component.scss'],
   standalone: true,
-  imports: [FormsModule]
+  imports: [FormsModule, CommonModule]
 })
 export class AddItemComponent {
   item = {
-    itemid: '',
+    
     description: '',
     location: '',
     tag: '',
@@ -19,41 +20,67 @@ export class AddItemComponent {
     status: 'lost',
     autofill: false,
     contact: '',
-    additionalContact: '',
-    images: [] as string[]  // store base64 images
+    additionalContact: ''
   };
 
-  imagePreviews: string[] = []; // for displaying previews
+  selectedImages: File[] = [];
+  imagePreviews: string[] = [];
 
-  constructor(private itemService: ItemService) {}
+  constructor(private http: HttpClient) {}
 
-  // Called when user selects images
+  // Handle file selection
   onImageSelected(event: Event) {
     const target = event.target as HTMLInputElement;
     if (target.files) {
-      Array.from(target.files).forEach(file => {
+      this.selectedImages = Array.from(target.files);
+      this.imagePreviews = [];
+
+      this.selectedImages.forEach(file => {
         const reader = new FileReader();
-        reader.onload = () => {
-          const base64 = reader.result as string;
-          this.item.images.push(base64.split(',')[1]); // remove prefix "data:image/png;base64,"
-          this.imagePreviews.push(base64); // for preview
-        };
+        reader.onload = (e: any) => this.imagePreviews.push(e.target.result);
         reader.readAsDataURL(file);
       });
     }
   }
 
+  // Submit form
   addItem() {
-    console.log('Item added', this.item);
-    this.itemService.addItem(this.item).subscribe(() => {
-      alert('Item added successfully!');
-      this.resetForm();
+    const formData = new FormData();
+
+    // Append text fields
+    
+    formData.append('description', this.item.description);
+    formData.append('location', this.item.location);
+    formData.append('tag', this.item.tag);
+    formData.append('dateLost', this.item.dateLost);
+    formData.append('status', this.item.status);
+    formData.append('autofill', this.item.autofill.toString());
+    formData.append('contact', this.item.contact);
+    formData.append('additionalContact', this.item.additionalContact);
+
+    // Append image files
+    this.selectedImages.forEach(file => {
+      formData.append('images', file); // ⚠️ key must match backend: upload.array('images')
+    });
+
+    console.log('Uploading item with formData:', formData);
+
+    this.http.post('http://localhost:3000/api/items', formData).subscribe({
+      next: (res) => {
+        console.log('✅ Item added:', res);
+        alert('Item added successfully!');
+        this.resetForm();
+      },
+      error: (err) => {
+        console.error('❌ Error adding item:', err);
+        alert('Error adding item.');
+      }
     });
   }
 
   resetForm() {
     this.item = {
-      itemid: '',
+      
       description: '',
       location: '',
       tag: '',
@@ -61,9 +88,9 @@ export class AddItemComponent {
       status: 'lost',
       autofill: false,
       contact: '',
-      additionalContact: '',
-      images: []
+      additionalContact: ''
     };
+    this.selectedImages = [];
     this.imagePreviews = [];
   }
 }
