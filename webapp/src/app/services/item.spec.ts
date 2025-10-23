@@ -5,6 +5,7 @@ import { ItemService } from './item.service';
 describe('ItemService', () => {
   let service: ItemService;
   let httpMock: HttpTestingController;
+  const baseUrl = 'http://localhost:3000/api/items';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -17,26 +18,54 @@ describe('ItemService', () => {
   });
 
   afterEach(() => {
-    httpMock.verify(); // Ensure no outstanding requests
+    httpMock.verify(); // ensures no open requests remain
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  // CREATE
+  it('should add a new item', () => {
+    const dummyItem = { description: 'New item' };
+
+    service.addItem(dummyItem).subscribe((res) => {
+      expect(res).toEqual(dummyItem);
+    });
+
+    const req = httpMock.expectOne(baseUrl);
+    expect(req.request.method).toBe('POST');
+    req.flush(dummyItem); // mock response
   });
 
+  // READ
+  it('should get all items', () => {
+    const dummyItems = [
+      { description: 'Item 1' },
+      { description: 'Item 2' }
+    ];
+
+    service.getItems().subscribe((res) => {
+      expect(res.length).toBe(2);
+      expect(res).toEqual(dummyItems);
+    });
+
+    const req = httpMock.expectOne(baseUrl);
+    expect(req.request.method).toBe('GET');
+    req.flush(dummyItems); // mock response
+  });
+
+  // UPDATE
   it('should update an item', () => {
-    const dummyItem = { description: 'Updated' };
+    const dummyItem = { description: 'Updated item' };
     const itemId = '123';
 
     service.updateItem(itemId, dummyItem).subscribe((res) => {
       expect(res).toEqual(dummyItem);
     });
 
-    const req = httpMock.expectOne(`http://localhost:3000/api/items/${itemId}`);
+    const req = httpMock.expectOne(`${baseUrl}/${itemId}`);
     expect(req.request.method).toBe('PUT');
-    req.flush(dummyItem); // Mock response
+    req.flush(dummyItem);
   });
 
+  // DELETE
   it('should delete an item', () => {
     const itemId = '123';
 
@@ -44,8 +73,8 @@ describe('ItemService', () => {
       expect(res).toEqual({});
     });
 
-    const req = httpMock.expectOne(`http://localhost:3000/api/items/${itemId}`);
+    const req = httpMock.expectOne(`${baseUrl}/${itemId}`);
     expect(req.request.method).toBe('DELETE');
-    req.flush({}); // Mock response
+    req.flush({});
   });
 });
