@@ -5,8 +5,8 @@ import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-delete-item',
-  templateUrl: './delete-item.component.html',
-  styleUrls: ['./delete-item.component.scss'],
+  templateUrl: './delete-items.component.html',
+  styleUrls: ['./delete-items.component.scss'],
   standalone: true,
   imports: [FormsModule, CommonModule]
 })
