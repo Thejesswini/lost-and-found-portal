@@ -1,22 +1,37 @@
 <div class="items-grid">
-    <div *ngFor="let item of items" class="item-card">
-      <img *ngIf="item.images?.length > 0" [src]="'data:image/png;base64,' + item.images[0]" class="main-image" alt="item image">
-      <div class="info">
-        <h3>{{item.description}}</h3>
-        <p>Location: {{item.location}}</p>
-        <p>Tag: {{item.tag}}</p>
-        <p>Status: 
-          <span class="status" [ngClass]="{
-            'lost': item.status === 'lost',
-            'found': item.status === 'found',
-            'returned': item.status === 'found and returned'
-          }">{{item.status}}</span>
-        </p>
-  
-        <div *ngIf="item.images?.length > 1" class="thumb-gallery">
-          <img *ngFor="let img of item.images" [src]="'data:image/png;base64,' + img" alt="thumb">
-        </div>
+  <div *ngFor="let item of items" class="item-card">
+    
+    <!-- 🖼️ Main Image -->
+    <img *ngIf="item.images?.length > 0" 
+         [src]="'data:image/png;base64,' + item.images[0]" 
+         class="main-image" 
+         alt="item image">
+
+    <!-- 📋 Info -->
+    <div class="info">
+      <h3>{{ item.description }}</h3>
+      <p>Location: {{ item.location }}</p>
+      <p>Tag: {{ item.tag }}</p>
+      <p>Status:
+        <span class="status" [ngClass]="{
+          'lost': item.status === 'lost',
+          'found': item.status === 'found',
+          'returned': item.status === 'found and returned'
+        }">{{ item.status }}</span>
+      </p>
+
+      <!-- 🖼️ Thumbnail Gallery -->
+      <div *ngIf="item.images?.length > 1" class="thumb-gallery">
+        <img *ngFor="let img of item.images" 
+             [src]="'data:image/png;base64,' + img" 
+             alt="thumb">
+      </div>
+
+      <!-- ⚙️ Update & Delete Buttons -->
+      <div class="item-actions">
+        <app-update-item [item]="item"></app-update-item>
+        <app-delete-item [itemId]="item._id"></app-delete-item>
       </div>
     </div>
   </div>
-  
+</div>

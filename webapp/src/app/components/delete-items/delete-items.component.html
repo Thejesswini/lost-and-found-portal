@@ -1,11 +1,16 @@
-<div class="delete-items-container">
+<div class="delete-items-container" *ngIf="showInput; else quickDelete">
   <h3>Delete Item</h3>
   <form (ngSubmit)="deleteItem()">
-    
     <input type="text" [(ngModel)]="itemId" name="itemId" placeholder="Item ID" required />
-
     <button type="submit" class="delete-btn">
       <i class="fa-solid fa-trash"></i> Delete Item
     </button>
   </form>
 </div>
+
+<!-- 👇 Used inside the items grid (no input field) -->
+<ng-template #quickDelete>
+  <button (click)="deleteItem()" class="delete-btn">
+    <i class="fa-solid fa-trash"></i>
+  </button>
+</ng-template>

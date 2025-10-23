@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -12,8 +12,10 @@ import { CommonModule } from '@angular/common';
   imports: [FormsModule, CommonModule]
 })
 export class UpdateItemComponent implements OnInit {
+  @Input() item: any; // 👈 added for inline usage
   itemId: string = '';
-  item = {
+
+  itemData = {
     description: '',
     location: '',
     tag: '',
@@ -22,7 +24,7 @@ export class UpdateItemComponent implements OnInit {
     autofill: false,
     contact: '',
     additionalContact: '',
-    images: [] as string[] // store URLs of existing images
+    images: [] as string[]
   };
 
   selectedImages: File[] = [];
@@ -35,15 +37,25 @@ export class UpdateItemComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.itemId = this.route.snapshot.paramMap.get('id')!;
-    this.loadItem();
+    // If used inside view-items (inline)
+    if (this.item && this.item._id) {
+      this.itemId = this.item._id;
+      this.itemData = { ...this.item };
+      this.imagePreviews = this.item.images ? [...this.item.images] : [];
+    } else {
+      // If accessed via route (edit page)
+      const routeId = this.route.snapshot.paramMap.get('id');
+      if (routeId) {
+        this.itemId = routeId;
+        this.loadItem();
+      }
+    }
   }
 
   loadItem() {
     this.http.get<any>(`http://localhost:3000/api/items/${this.itemId}`).subscribe({
       next: (res) => {
-        this.item = { ...res };
-        // show existing images as previews
+        this.itemData = { ...res };
         if (res.images) this.imagePreviews = [...res.images];
       },
       error: (err) => console.error('❌ Error loading item:', err)
@@ -54,8 +66,6 @@ export class UpdateItemComponent implements OnInit {
     const target = event.target as HTMLInputElement;
     if (target.files) {
       this.selectedImages = Array.from(target.files);
-
-      // Add new image previews
       this.selectedImages.forEach(file => {
         const reader = new FileReader();
         reader.onload = (e: any) => this.imagePreviews.push(e.target.result);
@@ -66,27 +76,22 @@ export class UpdateItemComponent implements OnInit {
 
   updateItem() {
     const formData = new FormData();
+    formData.append('description', this.itemData.description);
+    formData.append('location', this.itemData.location);
+    formData.append('tag', this.itemData.tag);
+    formData.append('dateLost', this.itemData.dateLost);
+    formData.append('status', this.itemData.status);
+    formData.append('autofill', this.itemData.autofill.toString());
+    formData.append('contact', this.itemData.contact);
+    formData.append('additionalContact', this.itemData.additionalContact);
 
-    // Append text fields
-    formData.append('description', this.item.description);
-    formData.append('location', this.item.location);
-    formData.append('tag', this.item.tag);
-    formData.append('dateLost', this.item.dateLost);
-    formData.append('status', this.item.status);
-    formData.append('autofill', this.item.autofill.toString());
-    formData.append('contact', this.item.contact);
-    formData.append('additionalContact', this.item.additionalContact);
-
-    // Append new image files
     this.selectedImages.forEach(file => formData.append('images', file));
-
-    console.log('Updating item with formData:', formData);
 
     this.http.put(`http://localhost:3000/api/items/${this.itemId}`, formData).subscribe({
       next: (res) => {
         console.log('✅ Item updated:', res);
         alert('Item updated successfully!');
-        this.router.navigate(['/items']); // redirect to list page
+        this.router.navigate(['/items']); // refresh or redirect
       },
       error: (err) => {
         console.error('❌ Error updating item:', err);

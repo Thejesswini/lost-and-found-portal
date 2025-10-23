@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
@@ -8,29 +7,34 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './delete-items.component.html',
   styleUrls: ['./delete-items.component.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule]
+  imports: [CommonModule]
 })
 export class DeleteItemComponent {
-  itemId: string = '';
+  @Input() itemId: string = ''; // 👈 For inline delete
+  @Input() showInput: boolean = false; // 👈 To optionally show manual input
 
   constructor(private http: HttpClient) {}
 
   deleteItem() {
-    if (!this.itemId) {
-      alert('Please enter an Item ID');
+    const idToDelete = this.itemId.trim();
+
+    if (!idToDelete) {
+      alert('Please enter or provide a valid Item ID');
       return;
     }
 
-    this.http.delete(`http://localhost:3000/api/items/${this.itemId}`).subscribe({
-      next: (res) => {
-        console.log('✅ Item deleted:', res);
-        alert('Item deleted successfully!');
-        this.itemId = '';
-      },
-      error: (err) => {
-        console.error('❌ Error deleting item:', err);
-        alert('Error deleting item. Make sure the Item ID is correct.');
-      }
-    });
+    if (confirm('Are you sure you want to delete this item?')) {
+      this.http.delete(`http://localhost:3000/api/items/${idToDelete}`).subscribe({
+        next: (res) => {
+          console.log('✅ Item deleted:', res);
+          alert('Item deleted successfully!');
+          if (this.showInput) this.itemId = ''; // reset if used standalone
+        },
+        error: (err) => {
+          console.error('❌ Error deleting item:', err);
+          alert('Error deleting item. Make sure the Item ID is correct.');
+        }
+      });
+    }
   }
 }
