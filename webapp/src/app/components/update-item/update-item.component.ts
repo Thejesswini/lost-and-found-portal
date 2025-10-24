@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   imports: [FormsModule, CommonModule]
 })
 export class UpdateItemComponent implements OnInit {
-  @Input() item: any; // 👈 added for inline usage
+  @Input() item: any; 
   itemId: string = '';
 
   itemData = {
@@ -37,13 +37,13 @@ export class UpdateItemComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // If used inside view-items (inline)
+   
     if (this.item && this.item._id) {
       this.itemId = this.item._id;
       this.itemData = { ...this.item };
       this.imagePreviews = this.item.images ? [...this.item.images] : [];
     } else {
-      // If accessed via route (edit page)
+      
       const routeId = this.route.snapshot.paramMap.get('id');
       if (routeId) {
         this.itemId = routeId;
@@ -58,7 +58,7 @@ export class UpdateItemComponent implements OnInit {
         this.itemData = { ...res };
         if (res.images) this.imagePreviews = [...res.images];
       },
-      error: (err) => console.error('❌ Error loading item:', err)
+      error: (err) => console.error('Error loading item:', err)
     });
   }
 
@@ -89,12 +89,12 @@ export class UpdateItemComponent implements OnInit {
 
     this.http.put(`http://localhost:3000/api/items/${this.itemId}`, formData).subscribe({
       next: (res) => {
-        console.log('✅ Item updated:', res);
+        console.log('Item updated:', res);
         alert('Item updated successfully!');
-        this.router.navigate(['/']); // refresh or redirect
+        this.router.navigate(['/']); 
       },
       error: (err) => {
-        console.error('❌ Error updating item:', err);
+        console.error('Error updating item:', err);
         alert('Error updating item.');
       }
     });
