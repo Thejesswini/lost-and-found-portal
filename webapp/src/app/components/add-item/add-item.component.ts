@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-add-item',
   templateUrl: './add-item.component.html',
@@ -26,7 +26,7 @@ export class AddItemComponent {
   selectedImages: File[] = [];
   imagePreviews: string[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   // Handle file selection
   onImageSelected(event: Event) {
@@ -69,7 +69,10 @@ export class AddItemComponent {
       next: (res) => {
         console.log('✅ Item added:', res);
         alert('Item added successfully!');
+        this.router.navigateByUrl('/');
+        window.location.reload();
         this.resetForm();
+
       },
       error: (err) => {
         console.error('❌ Error adding item:', err);

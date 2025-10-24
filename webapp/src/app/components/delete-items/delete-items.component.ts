@@ -1,19 +1,21 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-delete-item',
   templateUrl: './delete-items.component.html',
   styleUrls: ['./delete-items.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, FormsModule]
 })
 export class DeleteItemComponent {
   @Input() itemId: string = ''; // 👈 For inline delete
   @Input() showInput: boolean = false; // 👈 To optionally show manual input
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private router: Router) {}
 
   deleteItem() {
     const idToDelete = this.itemId.trim();
@@ -28,6 +30,8 @@ export class DeleteItemComponent {
         next: (res) => {
           console.log('✅ Item deleted:', res);
           alert('Item deleted successfully!');
+          this.router.navigate(['/']); // refresh or redirect
+          window.location.reload();
           if (this.showInput) this.itemId = ''; // reset if used standalone
         },
         error: (err) => {

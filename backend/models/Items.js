@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const itemSchema = new mongoose.Schema({
-  itemid: { type: String, required: true },
+  itemid: { type: String, required: true, default: () => new mongoose.Types.ObjectId().toString() },
   images: [String], // array of image URLs or filenames
   description: String,
   location: String,

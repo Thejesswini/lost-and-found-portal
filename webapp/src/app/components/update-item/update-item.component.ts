@@ -91,7 +91,7 @@ export class UpdateItemComponent implements OnInit {
       next: (res) => {
         console.log('✅ Item updated:', res);
         alert('Item updated successfully!');
-        this.router.navigate(['/items']); // refresh or redirect
+        this.router.navigate(['/']); // refresh or redirect
       },
       error: (err) => {
         console.error('❌ Error updating item:', err);
