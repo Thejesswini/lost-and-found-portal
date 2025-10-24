@@ -1,4 +1,4 @@
-/* Container */
+
 .add-item-container {
     max-width: 600px;
     margin: 40px auto;
@@ -9,7 +9,7 @@
     font-family: 'Helvetica Neue', sans-serif;
   }
   
-  /* Form inputs */
+
   .add-item-container input[type="text"],
   .add-item-container input[type="date"],
   .add-item-container select,
@@ -30,7 +30,7 @@
     outline: none;
   }
   
-  /* Checkbox styling */
+  
   .add-item-container .checkbox-label {
     display: flex;
     align-items: center;
@@ -42,7 +42,7 @@
     margin-right: 10px;
   }
   
-  /* Image preview */
+  
   .image-preview {
     display: flex;
     gap: 10px;
@@ -63,7 +63,7 @@
     transform: scale(1.1);
   }
   
-  /* Button */
+ 
   .add-item-container button {
     width: 100%;
     padding: 12px 0;

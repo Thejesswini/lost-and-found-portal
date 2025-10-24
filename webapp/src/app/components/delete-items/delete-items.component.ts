@@ -12,8 +12,8 @@ import { Router } from '@angular/router';
   imports: [CommonModule, FormsModule]
 })
 export class DeleteItemComponent {
-  @Input() itemId: string = ''; // 👈 For inline delete
-  @Input() showInput: boolean = false; // 👈 To optionally show manual input
+  @Input() itemId: string = ''; 
+  @Input() showInput: boolean = false; 
 
   constructor(private http: HttpClient,private router: Router) {}
 
@@ -28,14 +28,14 @@ export class DeleteItemComponent {
     if (confirm('Are you sure you want to delete this item?')) {
       this.http.delete(`http://localhost:3000/api/items/${idToDelete}`).subscribe({
         next: (res) => {
-          console.log('✅ Item deleted:', res);
+          console.log('Item deleted:', res);
           alert('Item deleted successfully!');
-          this.router.navigate(['/']); // refresh or redirect
+          this.router.navigate(['/']);
           window.location.reload();
-          if (this.showInput) this.itemId = ''; // reset if used standalone
+          if (this.showInput) this.itemId = ''; 
         },
         error: (err) => {
-          console.error('❌ Error deleting item:', err);
+          console.error('Error deleting item:', err);
           alert('Error deleting item. Make sure the Item ID is correct.');
         }
       });

@@ -22,7 +22,7 @@
 
     <input type="file" (change)="onImageSelected($event)" multiple />
 
-    <!-- Image Previews -->
+    
     <div class="image-preview" *ngIf="imagePreviews.length > 0">
       <img *ngFor="let img of imagePreviews" [src]="img" alt="preview" />
     </div>

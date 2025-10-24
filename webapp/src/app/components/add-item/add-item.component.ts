@@ -43,11 +43,11 @@ export class AddItemComponent {
     }
   }
 
-  // Submit form
+ 
   addItem() {
     const formData = new FormData();
 
-    // Append text fields
+   
     
     formData.append('description', this.item.description);
     formData.append('location', this.item.location);
@@ -58,16 +58,16 @@ export class AddItemComponent {
     formData.append('contact', this.item.contact);
     formData.append('additionalContact', this.item.additionalContact);
 
-    // Append image files
+   
     this.selectedImages.forEach(file => {
-      formData.append('images', file); // ⚠️ key must match backend: upload.array('images')
+      formData.append('images', file); 
     });
 
     console.log('Uploading item with formData:', formData);
 
     this.http.post('http://localhost:3000/api/items', formData).subscribe({
       next: (res) => {
-        console.log('✅ Item added:', res);
+        console.log('Item added:', res);
         alert('Item added successfully!');
         this.router.navigateByUrl('/');
         window.location.reload();
@@ -75,7 +75,7 @@ export class AddItemComponent {
 
       },
       error: (err) => {
-        console.error('❌ Error adding item:', err);
+        console.error('Error adding item:', err);
         alert('Error adding item.');
       }
     });
