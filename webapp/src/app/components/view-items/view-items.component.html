@@ -1,13 +1,19 @@
 <div class="items-grid">
   <div *ngFor="let item of items" class="item-card">
-    
-    
-    <img *ngIf="item.images?.length > 0" 
-         [src]="'data:image/png;base64,' + item.images[0]" 
-         class="main-image" 
-         alt="item image">
 
     
+    <div class="image-container" *ngIf="item.images?.length > 0">
+      <img 
+        [src]="'data:image/png;base64,' + item.images[item.currentImageIndex || 0]" 
+        class="main-image" 
+        alt="item image"
+      >
+
+      
+      <button class="prev-btn" *ngIf="item.images.length > 1" (click)="prevImage(item)">&#10094;</button>
+      <button class="next-btn" *ngIf="item.images.length > 1" (click)="nextImage(item)">&#10095;</button>
+    </div>
+
     <div class="info">
       <h3>{{ item.description }}</h3>
       <p>Location: {{ item.location }}</p>
@@ -20,18 +26,26 @@
         }">{{ item.status }}</span>
       </p>
 
-      
-      <div *ngIf="item.images?.length > 1" class="thumb-gallery">
-        <img *ngFor="let img of item.images" 
-             [src]="'data:image/png;base64,' + img" 
-             alt="thumb">
-      </div>
-
-     
       <div class="item-actions">
-        <app-update-item [item]="item"></app-update-item>
+        
+        <button (click)="openUpdateModal(item)" class="update-btn">
+          <i class="fa-solid fa-pen"></i>
+        </button>
+
+        
         <app-delete-item [itemId]="item._id"></app-delete-item>
       </div>
     </div>
+  </div>
+</div>
+
+
+<div class="modal-backdrop" *ngIf="showUpdateModal">
+  <div class="modal-content">
+    <button class="close-btn" (click)="closeUpdateModal()">&#10005;</button>
+    <app-update-item 
+      [item]="selectedItem"
+      (close)="closeUpdateModal()">
+    </app-update-item>
   </div>
 </div>

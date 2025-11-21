@@ -22,13 +22,17 @@
 
     <input type="file" (change)="onImageSelected($event)" multiple />
 
-    
     <div class="image-preview" *ngIf="imagePreviews.length > 0">
       <img *ngFor="let img of imagePreviews" [src]="img" alt="preview" />
     </div>
 
-    <button type="submit" class="update-btn">
-      <i class="fa-solid fa-pen"></i> Update Item
-    </button>
+    <div class="buttons">
+      <button type="submit" class="update-btn">
+        <i class="fa-solid fa-pen"></i> Update Item
+      </button>
+      <button type="button" (click)="cancelUpdate()" class="cancel-btn">
+        Cancel
+      </button>
+    </div>
   </form>
 </div>

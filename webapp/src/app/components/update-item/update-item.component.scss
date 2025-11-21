@@ -1,17 +1,19 @@
 .update-item-container {
-  max-width: 600px;
+  max-width: 500px;           
   margin: 30px auto;
-  padding: 25px;
+  padding: 20px;               
   background: #fff;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   font-family: 'Helvetica Neue', sans-serif;
   transition: all 0.3s ease-in-out;
+  max-height: 90vh;            
+  overflow-y: auto;            
 
   h3 {
     text-align: center;
     color: #333;
-    margin-bottom: 20px;
+    margin-bottom: 15px;       
   }
 
   input[type="text"],
@@ -19,8 +21,8 @@
   select,
   input[type="file"] {
     width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 15px;
+    padding: 10px 12px;        
+    margin-bottom: 12px;       
     border-radius: 10px;
     border: 1px solid #ccc;
     font-size: 14px;
@@ -36,23 +38,23 @@
   .checkbox-label {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 12px;        
     font-size: 14px;
 
     input {
-      margin-right: 10px;
+      margin-right: 8px;        
     }
   }
 
   .image-preview {
     display: flex;
-    gap: 10px;
+    gap: 8px;                  
     overflow-x: auto;
-    margin-bottom: 15px;
+    margin-bottom: 12px;       
 
     img {
-      width: 80px;
-      height: 80px;
+      width: 70px;              
+      height: 70px;
       object-fit: cover;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -66,17 +68,17 @@
 
   .update-btn {
     width: 100%;
-    padding: 12px 0;
+    padding: 10px 0;           
     border: none;
     border-radius: 10px;
     background: linear-gradient(90deg, #ff6a00, #ee0979);
     color: #fff;
-    font-size: 16px;
+    font-size: 15px;            
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 6px;                   
     transition: 0.3s;
 
     &:hover {

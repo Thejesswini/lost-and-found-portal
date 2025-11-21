@@ -1,5 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -12,9 +11,10 @@ import { CommonModule } from '@angular/common';
   imports: [FormsModule, CommonModule]
 })
 export class UpdateItemComponent implements OnInit {
-  @Input() item: any; 
-  itemId: string = '';
+  @Input() item: any;          
+  @Output() close = new EventEmitter<void>(); 
 
+  itemId: string = '';
   itemData = {
     description: '',
     location: '',
@@ -30,36 +30,14 @@ export class UpdateItemComponent implements OnInit {
   selectedImages: File[] = [];
   imagePreviews: string[] = [];
 
-  constructor(
-    private http: HttpClient,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
-   
     if (this.item && this.item._id) {
       this.itemId = this.item._id;
       this.itemData = { ...this.item };
       this.imagePreviews = this.item.images ? [...this.item.images] : [];
-    } else {
-      
-      const routeId = this.route.snapshot.paramMap.get('id');
-      if (routeId) {
-        this.itemId = routeId;
-        this.loadItem();
-      }
     }
-  }
-
-  loadItem() {
-    this.http.get<any>(`http://localhost:3000/api/items/${this.itemId}`).subscribe({
-      next: (res) => {
-        this.itemData = { ...res };
-        if (res.images) this.imagePreviews = [...res.images];
-      },
-      error: (err) => console.error('Error loading item:', err)
-    });
   }
 
   onImageSelected(event: Event) {
@@ -91,12 +69,16 @@ export class UpdateItemComponent implements OnInit {
       next: (res) => {
         console.log('Item updated:', res);
         alert('Item updated successfully!');
-        this.router.navigate(['/']); 
+        this.close.emit(); 
       },
       error: (err) => {
         console.error('Error updating item:', err);
         alert('Error updating item.');
       }
     });
+  }
+
+  cancelUpdate() {
+    this.close.emit(); 
   }
 }
