@@ -65,7 +65,7 @@ export class AddItemComponent {
 
     console.log('Uploading item with formData:', formData);
 
-    this.http.post('http://localhost:3000/api/items', formData).subscribe({
+    this.http.post('http://localhost:3000/items', formData).subscribe({
       next: (res) => {
         console.log('Item added:', res);
         alert('Item added successfully!');

@@ -13,7 +13,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 const itemRoutes = require('./routes/itemRoutes');
-app.use('/api/items', itemRoutes);
+app.use('/items', itemRoutes);
 
 // MongoDB connection
 mongoose.connect('mongodb://localhost:27017/lostfound', {
@@ -44,17 +44,17 @@ mongoose.connect('mongodb://localhost:27017/lostfound', {
 // const Item = mongoose.model('Item', itemSchema);
 
 //  READ - Get all items
-app.get('/api/items', async (req, res) => {
-  try {
-    console.log('GET /api/items called');
-    const items = await Item.find();
-    console.log('Items found:', items.length);
-    res.json(items);
-  } catch (error) {
-    console.error('Error fetching items:', error);
-    res.status(500).json({ message: 'Error fetching items', error });
-  }
-});
+// app.get('/items', async (req, res) => {
+//   try {
+//     console.log('GET /api/items called');
+//     const items = await Item.find();
+//     console.log('Items found:', items.length);
+//     res.json(items);
+//   } catch (error) {
+//     console.error('Error fetching items:', error);
+//     res.status(500).json({ message: 'Error fetching items', error });
+//   }
+// });
 
 //  CREATE - Add new item with images
 // `upload.array('images')` handles multiple file uploads with field name "images"
@@ -108,17 +108,17 @@ app.get('/api/items', async (req, res) => {
 // });
 
 // DELETE - Remove item by ID
-app.delete('/api/items/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    const deletedItem = await Item.findByIdAndDelete(id);
-    if (!deletedItem) return res.status(404).json({ message: 'Item not found' });
+// app.delete('/items/:id', async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const deletedItem = await Item.findByIdAndDelete(id);
+//     if (!deletedItem) return res.status(404).json({ message: 'Item not found' });
 
-    res.json({ message: 'Item deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error deleting item', error });
-  }
-});
+//     res.json({ message: 'Item deleted successfully' });
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error deleting item', error });
+//   }
+// });
 // Default route
 app.get('/', (req, res) => res.send('Backend is running!'));
 

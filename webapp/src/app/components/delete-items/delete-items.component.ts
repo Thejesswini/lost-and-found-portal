@@ -26,7 +26,7 @@ export class DeleteItemComponent {
     }
 
     if (confirm('Are you sure you want to delete this item?')) {
-      this.http.delete(`http://localhost:3000/api/items/${idToDelete}`).subscribe({
+      this.http.delete(`http://localhost:3000/items/${idToDelete}`).subscribe({
         next: (res) => {
           console.log('Item deleted:', res);
           alert('Item deleted successfully!');

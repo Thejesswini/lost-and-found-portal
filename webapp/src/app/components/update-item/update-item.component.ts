@@ -65,7 +65,7 @@ export class UpdateItemComponent implements OnInit {
 
     this.selectedImages.forEach(file => formData.append('images', file));
 
-    this.http.put(`http://localhost:3000/api/items/${this.itemId}`, formData).subscribe({
+    this.http.put(`http://localhost:3000/items/${this.itemId}`, formData).subscribe({
       next: (res) => {
         console.log('Item updated:', res);
         alert('Item updated successfully!');
