@@ -2,6 +2,13 @@ const mongoose = require('mongoose');
 
 const itemSchema = new mongoose.Schema({
   itemid: { type: String, required: true, default: () => new mongoose.Types.ObjectId().toString() },
+
+  createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
+    
   images: [String], // array of image URLs or filenames
   description: String,
   location: String,

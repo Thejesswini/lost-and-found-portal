@@ -5,9 +5,10 @@ const Item = require('../models/Items');
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
+const {verifyToken} = require("../middleware/auth-middleware");
 
 // CREATE - Add new item
-router.post('/', upload.array('images'), async (req, res) => {
+router.post('/', upload.array('images'), verifyToken, async (req, res) => {
   console.log(req.body);
   console.log(res.body);
   // try {
@@ -18,7 +19,7 @@ router.post('/', upload.array('images'), async (req, res) => {
   //   res.status(500).json({ message: 'Error creating item', error });
   // }
   try {
-    console.log('POST /api/items called');
+    console.log('POST /items called');
 
     // Convert uploaded images to base64
     const imageBase64 = req.files && req.files.length > 0
@@ -30,7 +31,8 @@ router.post('/', upload.array('images'), async (req, res) => {
       ...req.body,
       images: imageBase64,
       dateLost: req.body.dateLost ? new Date(req.body.dateLost) : null,
-      autofill: req.body.autofill === 'true' || false
+      autofill: req.body.autofill === 'true' || false,
+      createdBy: req.user.id
     };
 
     console.log('Item data to save:', itemData);
@@ -85,5 +87,16 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ message: 'Error deleting item', error });
   }
 });
+
+router.get("/:userid", verifyToken, async (req, res) => {
+    try {
+        const items = await Item.find({ createdBy: req.params.userid });
+        res.json(items);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
 
 module.exports = router;

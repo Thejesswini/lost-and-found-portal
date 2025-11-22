@@ -1,37 +1,23 @@
-<div class="items-grid">
-  <div *ngFor="let item of items" class="item-card">
+<div class="profile-container" *ngIf="!loading; else loadingTpl">
 
-    <div class="image-container" *ngIf="item.images?.length > 0">
-      <img 
-        [src]="'data:image/png;base64,' + item.images[item.currentImageIndex || 0]" 
-        class="main-image" 
-        alt="item image"
-      >
-      
-      <button class="prev-btn" *ngIf="item.images.length > 1" (click)="prevImage(item)">&#10094;</button>
-      <button class="next-btn" *ngIf="item.images.length > 1" (click)="nextImage(item)">&#10095;</button>
-    </div>
+  <h2>User Profile</h2>
 
-    <div class="info">
-      <h3>{{ item.description }}</h3>
-      <p>Location: {{ item.location }}</p>
-      <p>Tag: {{ item.tag }}</p>
-      <p>Status:
-        <span class="status" [ngClass]="{
-          'lost': item.status === 'lost',
-          'found': item.status === 'found',
-          'returned': item.status === 'found and returned'
-        }">{{ item.status }}</span>
-      </p>
-
-      <!-- Removed update and delete buttons -->
-    </div>
+  <div *ngIf="user; else noUser" class="profile-card">
+    <p><strong>Name:</strong> {{ user.name }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
   </div>
+
 </div>
 
-<!-- Removed modal for updating item since update button is gone -->
+<ng-template #loadingTpl>
+  <p>Loading...</p>
+</ng-template>
 
-<!-- <div class="items-grid">
+<ng-template #noUser>
+  <p>No user data found.</p>
+</ng-template>
+<hr>
+<div class="items-grid">
   <div *ngFor="let item of items" class="item-card">
 
     
@@ -81,4 +67,4 @@
       (close)="closeUpdateModal()">
     </app-update-item>
   </div>
-</div> -->
+</div>

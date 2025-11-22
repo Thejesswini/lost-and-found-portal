@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ItemService } from '../../services/item.service';
-import { UpdateItemComponent } from '../update-item/update-item.component';
-import { DeleteItemComponent } from '../delete-items/delete-items.component';
 
 @Component({
   selector: 'app-view-items',
@@ -12,23 +10,17 @@ import { DeleteItemComponent } from '../delete-items/delete-items.component';
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    UpdateItemComponent,
-    DeleteItemComponent
+    FormsModule
   ]
 })
 export class ViewItemsComponent {
   items: any[] = [];
-
-  selectedItem: any = null;        
-  showUpdateModal = false;          
 
   constructor(private itemService: ItemService) {}
 
   ngOnInit() {
     this.itemService.getItems().subscribe({
       next: (data) => {
-        
         this.items = data.map(item => ({ ...item, currentImageIndex: 0 }));
         console.log('Items loaded:', this.items);
       },
@@ -36,7 +28,6 @@ export class ViewItemsComponent {
     });
   }
 
-  
   prevImage(item: any) {
     if (item.currentImageIndex === 0) {
       item.currentImageIndex = item.images.length - 1;
@@ -51,18 +42,5 @@ export class ViewItemsComponent {
     } else {
       item.currentImageIndex++;
     }
-  }
-
-
-  openUpdateModal(item: any) {
-    this.selectedItem = { ...item }; 
-    this.showUpdateModal = true;
-  }
-
-  closeUpdateModal() {
-    this.showUpdateModal = false;
-    this.selectedItem = null;
-    
-    this.ngOnInit();
   }
 }

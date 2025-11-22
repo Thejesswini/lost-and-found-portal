@@ -1,0 +1,28 @@
+<div class="login-box">
+  <div class="login-container">
+    <h1 class="title">Welcome Back</h1>
+    <p class="subtitle">Login to continue</p>
+
+    <form class="login-form" [formGroup]="logForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required formControlName="email"/>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required formControlName="password"/>
+      </div>
+
+      <div class="form-options">
+        <label><input type="checkbox" /> Remember me</label>
+        <a href="#" class="forgot-password">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="login-btn" (click)="login()" [disabled]="logForm.invalid">Login</button>
+    </form>
+
+    <p class="signup-text">Don't have an account? <a href="../register">Sign up</a></p>
+  </div>
+
+</div>

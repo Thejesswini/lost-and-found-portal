@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-add-item',
   templateUrl: './add-item.component.html',
@@ -46,8 +47,6 @@ export class AddItemComponent {
  
   addItem() {
     const formData = new FormData();
-
-   
     
     formData.append('description', this.item.description);
     formData.append('location', this.item.location);
@@ -76,6 +75,8 @@ export class AddItemComponent {
       },
       error: (err) => {
         console.error('Error adding item:', err);
+        console.log(localStorage.getItem("token"));
+        console.log("check add-item.component.ts");
         alert('Error adding item.');
       }
     });
