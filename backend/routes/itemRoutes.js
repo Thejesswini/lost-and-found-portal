@@ -100,3 +100,14 @@ router.get("/:userid", verifyToken, async (req, res) => {
 
 
 module.exports = router;
+
+router.get("/search/:tag", async (req, res) => {
+  try {
+    const tag = req.params.tag;
+    const items = await Item.find({ tag: tag });
+    res.json(items);
+  } catch (error) {
+    console.error("Error searching items:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
