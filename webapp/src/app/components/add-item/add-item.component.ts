@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
+
 @Component({
   selector: 'app-add-item',
   templateUrl: './add-item.component.html',
@@ -51,6 +52,30 @@ export class AddItemComponent implements OnInit{
         console.error('Error fetching tags:', err);
       }
     });
+  }
+  
+  handleAutofill() {
+    if (this.item.autofill) {
+      const email = this.getUserEmailFromToken();
+      if (email) {
+        this.item.contact = email;
+      }
+    } else {
+      this.item.contact = "";
+    }
+  }
+
+  getUserEmailFromToken(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.email || null;
+    } catch (err) {
+      console.error("Error decoding token", err);
+      return null;
+    }
   }
 
   // Handle file selection

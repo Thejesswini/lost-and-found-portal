@@ -19,7 +19,7 @@
     </select>
 
     <label class="checkbox-label">
-      <input type="checkbox" [(ngModel)]="item.autofill" name="autofill" /> Autofill
+      <input type="checkbox" [(ngModel)]="item.autofill" name="autofill" (change)="handleAutofill()"/> Autofill
     </label>
 
     <input type="text" [(ngModel)]="item.contact" name="contact" placeholder="Contact" />

@@ -71,6 +71,8 @@ export class UpdateItemComponent implements OnInit {
     });
   }
 
+  
+
   onImageSelected(event: Event) {
     const target = event.target as HTMLInputElement;
     if (target.files) {
