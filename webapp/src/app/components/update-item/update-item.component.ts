@@ -1,4 +1,3 @@
-
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -38,24 +37,6 @@ export class UpdateItemComponent implements OnInit {
       this.itemId = this.item._id;
       this.itemData = { ...this.item };
       this.imagePreviews = this.item.images ? [...this.item.images] : [];
-
-      // Format dateLost to yyyy-mm-dd for input
-      if (this.itemData.dateLost) {
-        const d = new Date(this.itemData.dateLost);
-        this.itemData.dateLost = d.toISOString().substring(0, 10);
-      }
-    }
-  }
-
-  // ✅ Simple autofill function
-  toggleAutofill() {
-    if (this.itemData.autofill) {
-      // Replace these values with the actual user's contact info
-      this.itemData.contact = '9999999999';         
-      this.itemData.additionalContact = '8888888888';
-    } else {
-      this.itemData.contact = '';
-      this.itemData.additionalContact = '';
     }
   }
 
@@ -84,19 +65,20 @@ export class UpdateItemComponent implements OnInit {
 
     this.selectedImages.forEach(file => formData.append('images', file));
 
-    this.http.put(`http://localhost:3000/api/items/${this.itemId}`, formData).subscribe({
+    this.http.put(`http://localhost:3000/items/${this.itemId}`, formData).subscribe({
       next: (res) => {
+        console.log('Item updated:', res);
         alert('Item updated successfully!');
         this.close.emit(); 
       },
       error: (err) => {
-        console.error(err);
+        console.error('Error updating item:', err);
         alert('Error updating item.');
       }
     });
   }
 
   cancelUpdate() {
-    this.close.emit();
+    this.close.emit(); 
   }
 }
