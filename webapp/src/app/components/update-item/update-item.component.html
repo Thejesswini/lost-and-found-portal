@@ -1,38 +1,32 @@
-<div class="update-item-container">
-  <form (ngSubmit)="updateItem()">
-    <h3>Update Item</h3>
 
-    <input type="text" [(ngModel)]="itemData.description" name="description" placeholder="Description" required />
-    <input type="text" [(ngModel)]="itemData.location" name="location" placeholder="Location" required />
-    <input type="text" [(ngModel)]="itemData.tag" name="tag" placeholder="Tag" />
-    <input type="date" [(ngModel)]="itemData.dateLost" name="dateLost" />
+updateitem
 
-    <select [(ngModel)]="itemData.status" name="status">
-      <option value="lost">Lost</option>
-      <option value="found">Found</option>
-      <option value="found and returned">Found & Returned</option>
-    </select>
+<form (ngSubmit)="updateItem()">
+  <input type="text" [(ngModel)]="itemData.description" name="description" placeholder="Description" required />
+  <input type="text" [(ngModel)]="itemData.location" name="location" placeholder="Location" required />
+  <input type="text" [(ngModel)]="itemData.tag" name="tag" placeholder="Tag" />
+  <input type="date" [(ngModel)]="itemData.dateLost" name="dateLost" />
 
-    <label class="checkbox-label">
-      <input type="checkbox" [(ngModel)]="itemData.autofill" name="autofill" /> Autofill
-    </label>
+  <select [(ngModel)]="itemData.status" name="status">
+    <option value="lost">Lost</option>
+    <option value="found">Found</option>
+    <option value="found and returned">Found & Returned</option>
+  </select>
 
-    <input type="text" [(ngModel)]="itemData.contact" name="contact" placeholder="Contact" />
-    <input type="text" [(ngModel)]="itemData.additionalContact" name="additionalContact" placeholder="Additional Contact" />
+  <label>
+    <input type="checkbox" [(ngModel)]="itemData.autofill" name="autofill" (change)="toggleAutofill()" />
+    Autofill
+  </label>
 
-    <input type="file" (change)="onImageSelected($event)" multiple />
+  <input type="text" [(ngModel)]="itemData.contact" name="contact" placeholder="Contact" />
+  <input type="text" [(ngModel)]="itemData.additionalContact" name="additionalContact" placeholder="Additional Contact" />
 
-    <div class="image-preview" *ngIf="imagePreviews.length > 0">
-      <img *ngFor="let img of imagePreviews" [src]="img" alt="preview" />
-    </div>
+  <input type="file" (change)="onImageSelected($event)" multiple />
 
-    <div class="buttons">
-      <button type="submit" class="update-btn">
-        <i class="fa-solid fa-pen"></i> Update Item
-      </button>
-      <button type="button" (click)="cancelUpdate()" class="cancel-btn">
-        Cancel
-      </button>
-    </div>
-  </form>
-</div>
+  <div *ngIf="imagePreviews.length">
+    <img *ngFor="let img of imagePreviews" [src]="img" alt="preview" />
+  </div>
+
+  <button type="submit">Update Item</button>
+  <button type="button" (click)="cancelUpdate()">Cancel</button>
+</form>

@@ -1,0 +1,35 @@
+<div class="details-container" *ngIf="item">
+
+  <!-- Show image card ONLY if images exist -->
+  <div class="image-card" *ngIf="item.images && item.images.length > 0">
+    <img 
+      [src]="'data:image/jpeg;base64,' + item.images[currentImageIndex]" 
+      alt="Item Image"
+      class="item-image"
+    />
+
+    <!-- Image navigation -->
+    <button class="nav-btn left" (click)="prevImage()">❮</button>
+    <button class="nav-btn right" (click)="nextImage()">❯</button>
+  </div>
+
+  <div class="info-card">
+    <h2>{{ item.title }}</h2>
+
+    <p><strong>Description:</strong> {{ item.description }}</p>
+    <p><strong>Location Lost:</strong> {{ item.location }}</p>
+    <p><strong>Date Lost:</strong> {{ item.dateLost | date }}</p>
+    <p><strong>Tag:</strong> {{ item.tag }}</p>
+
+    <!-- NEW FIELDS -->
+    <p *ngIf="item.contact">
+      <strong>Contact:</strong> {{ item.contact }}
+    </p>
+
+    <p *ngIf="item.additionalContact">
+      <strong>Additional Contact:</strong> {{ item.additionalContact }}
+    </p>
+
+  </div>
+
+</div>

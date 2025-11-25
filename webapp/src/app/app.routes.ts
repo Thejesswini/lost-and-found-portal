@@ -52,5 +52,13 @@ export const routes: Routes = [
         component:UserProfileComponent,
         canActivate:[authGuard]
     },
-];
 
+    // 👉 NEW ROUTE ADDED HERE
+    {
+        path:"item/:id",
+        loadComponent: () =>
+            import('./components/item-details/item-details')
+            .then(m => m.ItemDetailsComponent),
+        canActivate:[authGuard]
+    }
+];

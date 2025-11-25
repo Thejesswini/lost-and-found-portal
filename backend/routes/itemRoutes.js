@@ -88,6 +88,18 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// GET single item by ID — place this BEFORE the /:userid route
+router.get("/id/:id", async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id);
+    if (!item) return res.status(404).json({ message: "Item not found" });
+    res.json(item); // send the single item object
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 router.get("/:userid", verifyToken, async (req, res) => {
     try {
         const items = await Item.find({ createdBy: req.params.userid });

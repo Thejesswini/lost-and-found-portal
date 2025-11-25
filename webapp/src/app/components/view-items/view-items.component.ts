@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ItemService } from '../../services/item.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-items',
@@ -16,7 +17,10 @@ import { ItemService } from '../../services/item.service';
 export class ViewItemsComponent {
   items: any[] = [];
 
-  constructor(private itemService: ItemService) {}
+  constructor(
+    private itemService: ItemService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.itemService.getItems().subscribe({
@@ -42,5 +46,10 @@ export class ViewItemsComponent {
     } else {
       item.currentImageIndex++;
     }
+  }
+
+  // 👉 NEW FUNCTION
+  goToDetails(id: string) {
+    this.router.navigate(['/item', id]);
   }
 }

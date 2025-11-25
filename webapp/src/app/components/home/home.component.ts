@@ -6,7 +6,7 @@ import { ViewItemsComponent } from '../view-items/view-items.component';
   selector: 'app-home',
   imports: [AddItemComponent, ViewItemsComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrls: ['./home.component.scss']
 })
 export class Home {
 
