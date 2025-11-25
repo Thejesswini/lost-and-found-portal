@@ -1,58 +1,24 @@
-<div class="items-grid">
-  <div *ngFor="let item of items"
-       class="item-card"
-       (click)="goToDetails(item._id)">  <!-- CLICK ADDED -->
+<div class="tag-search-container">
+  <i class="fa-solid fa-magnifying-glass search-icon"></i>
 
-    <div class="image-container" *ngIf="item.images?.length > 0">
-      <img 
-        [src]="'data:image/png;base64,' + item.images[item.currentImageIndex || 0]" 
-        class="main-image" 
-        alt="item image"
-      >
-      
-      <button class="prev-btn"
-              *ngIf="item.images.length > 1"
-              (click)="prevImage(item); $event.stopPropagation()">
-        &#10094;
-      </button>
-
-      <button class="next-btn"
-              *ngIf="item.images.length > 1"
-              (click)="nextImage(item); $event.stopPropagation()">
-        &#10095;
-      </button>
-    </div>
-
-    <div class="info">
-      <h3>{{ item.description }}</h3>
-      <p>Location: {{ item.location }}</p>
-      <p>Tag: {{ item.tag }}</p>
-      <p>Status:
-        <span class="status" [ngClass]="{
-          'lost': item.status === 'lost',
-          'found': item.status === 'found',
-          'returned': item.status === 'found and returned'
-        }">{{ item.status }}</span>
-      </p>
-    </div>
-
-  </div>
+  <select [(ngModel)]="selectedTag" (change)="onTagSelected()" class="tag-dropdown">
+    <option value="All" disabled selected>Search by tag</option>
+    <option value="All">All</option>
+    <option *ngFor="let tag of tags" [value]="tag.name">{{ tag.name }}</option>
+  </select>
 </div>
 
 
-<!-- Removed modal for updating item since update button is gone -->
 
-<!-- <div class="items-grid">
-  <div *ngFor="let item of items" class="item-card">
+<div class="items-grid">
+  <div *ngFor="let item of items" class="item-card" (click)="goToDetails(item._id)">
 
-    
     <div class="image-container" *ngIf="item.images?.length > 0">
       <img 
         [src]="'data:image/png;base64,' + item.images[item.currentImageIndex || 0]" 
         class="main-image" 
         alt="item image"
       >
-
       
       <button class="prev-btn" *ngIf="item.images.length > 1" (click)="prevImage(item)">&#10094;</button>
       <button class="next-btn" *ngIf="item.images.length > 1" (click)="nextImage(item)">&#10095;</button>
@@ -70,26 +36,7 @@
         }">{{ item.status }}</span>
       </p>
 
-      <div class="item-actions">
-        
-        <button (click)="openUpdateModal(item)" class="update-btn">
-          <i class="fa-solid fa-pen"></i>
-        </button>
-
-        
-        <app-delete-item [itemId]="item._id"></app-delete-item>
-      </div>
+      <!-- Removed update and delete buttons -->
     </div>
   </div>
 </div>
-
-
-<div class="modal-backdrop" *ngIf="showUpdateModal">
-  <div class="modal-content">
-    <button class="close-btn" (click)="closeUpdateModal()">&#10005;</button>
-    <app-update-item 
-      [item]="selectedItem"
-      (close)="closeUpdateModal()">
-    </app-update-item>
-  </div>
-</div> -->

@@ -6,7 +6,12 @@
 
     <input type="text" [(ngModel)]="itemData.description" name="description" placeholder="Description" required />
     <input type="text" [(ngModel)]="itemData.location" name="location" placeholder="Location" required />
-    <input type="text" [(ngModel)]="itemData.tag" name="tag" placeholder="Tag" />
+    <select [(ngModel)]="itemData.tag" name="tag" required>
+      <option value="" disabled selected>Select a Tag</option>
+      <option *ngFor="let t of tags" [value]="t.name">
+        {{ t.name }}
+      </option>
+    </select>
     <input type="date" [(ngModel)]="itemData.dateLost" name="dateLost" />
 
     <select [(ngModel)]="itemData.status" name="status">

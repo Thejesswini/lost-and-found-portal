@@ -59,16 +59,31 @@ router.get('/', async (req, res) => {
 
 // UPDATE - Update an item by ID
 router.put('/:id', upload.array('images'), async (req, res) => {
-  const { id } = req.params; // ID of the item to update
-  const updatedData = req.body; // New data for the item
-
   try {
-    const updatedItem = await Item.findByIdAndUpdate(id, updatedData, { new: true });
-    if (!updatedItem) {
-      return res.status(404).json({ message: 'Item not found' });
+    const item = await Item.findById(req.params.id);
+    if (!item) return res.status(404).json({ message: 'Item not found' });
+
+    // Update text fields
+    item.description = req.body.description;
+    item.location = req.body.location;
+    item.tag = req.body.tag;
+    item.dateLost = req.body.dateLost;
+    item.status = req.body.status;
+    item.autofill = req.body.autofill;
+    item.contact = req.body.contact;
+    item.additionalContact = req.body.additionalContact;
+
+    // If new images uploaded
+    if (req.files && req.files.length > 0) {
+      const newImgBase64 = req.files.map(file => file.buffer.toString('base64'));
+      item.images.push(...newImgBase64);
     }
-    res.status(200).json(updatedItem);
+
+    const updatedItem = await item.save();
+    res.json(updatedItem);
+
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: 'Error updating item', error });
   }
 });
@@ -114,8 +129,10 @@ router.get("/:userid", verifyToken, async (req, res) => {
 module.exports = router;
 
 router.get("/search/:tag", async (req, res) => {
+  console.log("reached itemRoutes");
   try {
     const tag = req.params.tag;
+    console.log(tag);
     const items = await Item.find({ tag: tag });
     res.json(items);
   } catch (error) {

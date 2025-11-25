@@ -1,22 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-item',
   templateUrl: './add-item.component.html',
   styleUrls: ['./add-item.component.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule]
+  imports: [FormsModule, CommonModule, MatSnackBarModule]
 })
-export class AddItemComponent {
+export class AddItemComponent implements OnInit{
+
+  tags: any[] = [];
+
   item = {
     
     description: '',
     location: '',
-    tag: '',
+    tag: 'water bottle',
     dateLost: '',
     status: 'lost',
     autofill: false,
@@ -27,7 +32,26 @@ export class AddItemComponent {
   selectedImages: File[] = [];
   imagePreviews: string[] = [];
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient, 
+    private router: Router,
+    private snackBar: MatSnackBar) {}
+
+  ngOnInit() {
+    this.fetchTags();
+  }
+
+  fetchTags() {
+    this.http.get('http://localhost:3000/tags').subscribe({
+      next: (data: any) => {
+        this.tags = data; // Store the backend response in our array
+        console.log('Tags loaded:', this.tags);
+      },
+      error: (err) => {
+        console.error('Error fetching tags:', err);
+      }
+    });
+  }
 
   // Handle file selection
   onImageSelected(event: Event) {
@@ -46,6 +70,33 @@ export class AddItemComponent {
 
  
   addItem() {
+    if (
+      !this.item.description.trim() || 
+      !this.item.location.trim() || 
+      !this.item.contact.trim()
+    ) {
+      this.snackBar.open('Please fill in Description, Location, and Contact', 'Close', {
+        duration: 5000, 
+        panelClass: ['error-snackbar'] // Optional: You can style this class in global styles
+      });
+      return;
+    }
+
+    // 2. NEW: Check for Future Date
+  if (this.item.dateLost) {
+    const selectedDate = new Date(this.item.dateLost);
+    const today = new Date();
+
+    // specific check: if selectedDate is strictly greater than now
+    if (selectedDate > today) {
+      this.snackBar.open('Date lost/found cannot be in the future', 'Retry', {
+        duration: 5000,
+        panelClass: ['error-snackbar']
+      });
+      return; // Stop execution
+    }
+  }
+
     const formData = new FormData();
     
     formData.append('description', this.item.description);
@@ -67,15 +118,20 @@ export class AddItemComponent {
     this.http.post('http://localhost:3000/items', formData).subscribe({
       next: (res) => {
         console.log('Item added:', res);
-        alert('Item added successfully!');
-        this.router.navigateByUrl('/');
-        window.location.reload();
-        this.resetForm();
-
+        Swal.fire({
+          title: 'Success!',
+          text: 'Item added successfully',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then((result) => {
+          // 2. ONLY run this code after the user clicks "OK"
+          if (result.isConfirmed) {
+            window.location.reload(); 
+          }
+        });
       },
       error: (err) => {
         console.error('Error adding item:', err);
-        console.log(localStorage.getItem("token"));
         console.log("check add-item.component.ts");
         alert('Error adding item.');
       }

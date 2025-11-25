@@ -80,3 +80,23 @@
   box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
 
+/* 1. Make Inputs and Selects identical in structure */
+input, select {
+  font-family: inherit;    /* Forces them to use the same font */
+  font-size: 16px;         /* Ensure same text size */
+  border: 1px solid #ccc;  /* Match borders */
+  border-radius: 5px;      /* Match corners */
+  box-sizing: border-box;  
+  background-color: white;
+}
+
+/* 2. Fix the "Select a Tag" color to look like a placeholder */
+/* This works because your default option has value="" and the select is required */
+select:invalid {
+  color: #757575; /* This is the standard gray for placeholders */
+}
+
+/* 3. Ensure when they click the dropdown, the actual options are black */
+option {
+  color: black;
+}

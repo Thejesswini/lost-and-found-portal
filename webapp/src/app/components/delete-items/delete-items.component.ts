@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-delete-item',
@@ -25,20 +26,29 @@ export class DeleteItemComponent {
       return;
     }
 
-    if (confirm('Are you sure you want to delete this item?')) {
-      this.http.delete(`http://localhost:3000/items/${idToDelete}`).subscribe({
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Selected item will be deleted",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#5daaf3ff',
+      cancelButtonColor: 'rgba(221, 71, 51, 1)',
+      confirmButtonText: 'Delete'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.http.delete(`http://localhost:3000/items/${idToDelete}`).subscribe({
         next: (res) => {
-          console.log('Item deleted:', res);
-          alert('Item deleted successfully!');
-          this.router.navigate(['/']);
+          
           window.location.reload();
-          if (this.showInput) this.itemId = ''; 
+              if (this.showInput) this.itemId = ''; 
+              console.log('Item deleted:', res);
         },
         error: (err) => {
           console.error('Error deleting item:', err);
           alert('Error deleting item. Make sure the Item ID is correct.');
         }
       });
-    }
+      }
+    });
   }
 }
