@@ -81,16 +81,28 @@ export class AddItemComponent implements OnInit{
   // Handle file selection
   onImageSelected(event: Event) {
     const target = event.target as HTMLInputElement;
-    if (target.files) {
-      this.selectedImages = Array.from(target.files);
-      this.imagePreviews = [];
-
-      this.selectedImages.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (e: any) => this.imagePreviews.push(e.target.result);
-        reader.readAsDataURL(file);
-      });
-    }
+    if (!target.files) return;
+  
+    const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+  
+    this.selectedImages = [];
+    this.imagePreviews = [];
+  
+    Array.from(target.files).forEach(file => {
+      if (!validTypes.includes(file.type)) {
+        this.snackBar.open('Only image files (PNG, JPG, JPEG, WEBP) are allowed.', 'Close', {
+          duration: 4000,
+          panelClass: ['error-snackbar']
+        });
+        return;
+      }
+  
+      this.selectedImages.push(file);
+  
+      const reader = new FileReader();
+      reader.onload = (e: any) => this.imagePreviews.push(e.target.result);
+      reader.readAsDataURL(file);
+    });
   }
 
  

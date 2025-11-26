@@ -75,15 +75,32 @@ export class UpdateItemComponent implements OnInit {
 
   onImageSelected(event: Event) {
     const target = event.target as HTMLInputElement;
-    if (target.files) {
-      this.selectedImages = Array.from(target.files);
-      this.selectedImages.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (e: any) => this.imagePreviews.push(e.target.result);
-        reader.readAsDataURL(file);
-      });
+    if (!target.files) return;
+  
+    const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+  
+    this.selectedImages = [];
+    this.imagePreviews = [];
+  
+    for (const file of Array.from(target.files)) {
+  
+      if (!validTypes.includes(file.type)) {
+        target.value = '';
+        this.snackBar.open('Only image files allowed.', 'Close', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+        return;
+      }
+  
+      this.selectedImages.push(file);
+  
+      const reader = new FileReader();
+      reader.onload = (e: any) => this.imagePreviews.push(e.target.result);
+      reader.readAsDataURL(file);
     }
   }
+  
 
   updateItem() {
     if (

@@ -25,7 +25,12 @@
     <input type="text" [(ngModel)]="item.contact" name="contact" placeholder="Contact" />
     <input type="text" [(ngModel)]="item.additionalContact" name="additionalContact" placeholder="Additional Contact" />
 
-    <input type="file" (change)="onImageSelected($event)" multiple />
+    <input 
+  type="file" 
+  (change)="onImageSelected($event)" 
+  accept="image/png, image/jpeg, image/jpg, image/webp"
+  multiple
+/>
 
    
     <div class="image-preview" *ngIf="imagePreviews.length > 0">
