@@ -53,7 +53,6 @@ export const routes: Routes = [
         canActivate:[authGuard]
     },
 
-    // 👉 NEW ROUTE ADDED HERE
     {
         path:"item/:id",
         loadComponent: () =>

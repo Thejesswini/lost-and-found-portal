@@ -45,7 +45,7 @@ export class AddItemComponent implements OnInit{
   fetchTags() {
     this.http.get('http://localhost:3000/tags').subscribe({
       next: (data: any) => {
-        this.tags = data; // Store the backend response in our array
+        this.tags = data; // Store the backend response in array
         console.log('Tags loaded:', this.tags);
       },
       error: (err) => {
@@ -114,17 +114,17 @@ export class AddItemComponent implements OnInit{
     ) {
       this.snackBar.open('Please fill in Description, Location, and Contact', 'Close', {
         duration: 5000, 
-        panelClass: ['error-snackbar'] // Optional: You can style this class in global styles
+        panelClass: ['error-snackbar'] 
       });
       return;
     }
 
-    // 2. NEW: Check for Future Date
+    //Check for Future Date
   if (this.item.dateLost) {
     const selectedDate = new Date(this.item.dateLost);
     const today = new Date();
 
-    // specific check: if selectedDate is strictly greater than now
+    
     if (selectedDate > today) {
       this.snackBar.open('Date lost/found cannot be in the future', 'Retry', {
         duration: 5000,
@@ -161,7 +161,6 @@ export class AddItemComponent implements OnInit{
           icon: 'success',
           confirmButtonText: 'OK'
         }).then((result) => {
-          // 2. ONLY run this code after the user clicks "OK"
           if (result.isConfirmed) {
             window.location.reload(); 
           }

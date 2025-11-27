@@ -19,7 +19,7 @@ const tagRoutes = require('./routes/tagRoutes');
 app.use("/auth", authRoutes);
 app.use("/items", itemRoutes);
 app.use("/user", userRoutes);
-app.use("/tags", tagRoutes); // Only this should handle /tags
+app.use("/tags", tagRoutes); // /tags
 
 // MongoDB Connection
 async function connectDb() {

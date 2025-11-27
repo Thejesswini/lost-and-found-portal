@@ -1,6 +1,6 @@
 <div class="details-container" *ngIf="item">
 
-  <!-- Show image card ONLY if images exist -->
+  <!-- Show image card if images exist -->
   <div class="image-card" *ngIf="item.images && item.images.length > 0">
     <img 
       [src]="'data:image/jpeg;base64,' + item.images[currentImageIndex]" 
@@ -8,7 +8,6 @@
       class="item-image"
     />
 
-    <!-- Image navigation -->
     <button class="nav-btn left" (click)="prevImage()">❮</button>
     <button class="nav-btn right" (click)="nextImage()">❯</button>
   </div>
@@ -21,7 +20,7 @@
     <p><strong>Date Lost:</strong> {{ item.dateLost | date }}</p>
     <p><strong>Tag:</strong> {{ item.tag }}</p>
 
-    <!-- NEW FIELDS -->
+    <!-- contact -->
     <p *ngIf="item.contact">
       <strong>Contact:</strong> {{ item.contact }}
     </p>

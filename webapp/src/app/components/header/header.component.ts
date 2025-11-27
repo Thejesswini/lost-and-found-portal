@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,7 @@ import Swal from 'sweetalert2';
 })
 export class Header {
 
-  constructor(private router: Router) {}
+  router = inject(Router);
 
   goToProfile() {
     this.router.navigate(['/user-profile']);

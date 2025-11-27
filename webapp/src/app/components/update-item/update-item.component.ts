@@ -49,10 +49,9 @@ export class UpdateItemComponent implements OnInit {
       autofill: this.item.autofill,
       contact: this.item.contact,
       additionalContact: this.item.additionalContact,
-      images: []   // don't load existing images as base64
+      images: []   // don't load existing images
     };
 
-    // Previews can display base64 but never send them
     this.imagePreviews = [...this.item.images];
 
     this.fetchTags();
@@ -62,7 +61,7 @@ export class UpdateItemComponent implements OnInit {
   fetchTags() {
     this.http.get('http://localhost:3000/tags').subscribe({
       next: (data: any) => {
-        this.tags = data; // Store the backend response in our array
+        this.tags = data; // Store the backend response in array
         console.log('Tags loaded:', this.tags);
       },
       error: (err) => {
@@ -110,17 +109,16 @@ export class UpdateItemComponent implements OnInit {
     ) {
       this.snackBar.open('Description, Location, and Contact cannot be empty', 'Close', {
         duration: 5000, 
-        panelClass: ['error-snackbar'] // Optional: You can style this class in global styles
+        panelClass: ['error-snackbar'] 
       });
       return;
     }
 
-    // 2. NEW: Check for Future Date
+    //Check for Future Date
   if (this.item.dateLost) {
     const selectedDate = new Date(this.item.dateLost);
     const today = new Date();
 
-    // specific check: if selectedDate is strictly greater than now
     if (selectedDate > today) {
       this.snackBar.open('Date lost/found cannot be in the future', 'Retry', {
         duration: 3000,
@@ -139,21 +137,7 @@ export class UpdateItemComponent implements OnInit {
     formData.append('contact', this.itemData.contact);
     formData.append('additionalContact', this.itemData.additionalContact);
 
-  //   this.selectedImages.forEach(file => formData.append('images', file));
 
-  //   this.http.put(`http://localhost:3000/items/${this.itemId}`, formData).subscribe({
-  //     next: (res) => {
-  //       console.log('Item updated:', res);
-  //       alert('Item updated successfully!');
-  //       window.location.reload();
-  //       this.close.emit(); 
-  //     },
-  //     error: (err) => {
-  //       console.error('Error updating item:', err);
-  //       alert('Error updating item.');
-  //     }
-  //   });
-  // }
   this.selectedImages.forEach(file => {
     formData.append('images', file);
   });
@@ -167,7 +151,7 @@ export class UpdateItemComponent implements OnInit {
           icon: 'success',
           confirmButtonText: 'OK'
         }).then((result) => {
-          // 2. ONLY run this code after the user clicks "OK"
+          //code runs after the user clicks "OK"
           if (result.isConfirmed) {
             window.location.reload(); 
               this.close.emit();

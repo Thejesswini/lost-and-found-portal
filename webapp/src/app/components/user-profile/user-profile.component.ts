@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
 import { UpdateItemComponent } from '../update-item/update-item.component';
 import { DeleteItemComponent } from '../delete-items/delete-items.component';
 
@@ -9,7 +8,6 @@ import { DeleteItemComponent } from '../delete-items/delete-items.component';
   selector: 'app-user-profile',
   imports: [
     CommonModule,
-    FormsModule,
     UpdateItemComponent,
     DeleteItemComponent
   ],
@@ -30,12 +28,11 @@ export class UserProfileComponent implements OnInit {
   ngOnInit() {
     console.log("User profile component loaded");
 
-    // 1️⃣ Get logged-in user data
     this.http.get("http://localhost:3000/user/me").subscribe({
       next: (res: any) => {
         this.user = res;
 
-        // 2️⃣ After we have user.id → fetch their posts
+        //fetch posts
         this.fetchUserItems(res._id);
 
         this.loading = false;
@@ -47,13 +44,13 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  // 3️⃣ Fetch items created by this user
+  //Fetch items created by this user
   fetchUserItems(userId: string) {
     this.http.get(`http://localhost:3000/items/${userId}`).subscribe({
       next: (res: any) => {
         console.log("User items:", res);
 
-        // add index tracking for each item's images
+        //index tracking for each item's images
         this.items = res.map((item: any) => ({
           ...item,
           currentImageIndex: 0
@@ -65,7 +62,6 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  // 4️⃣ Image navigation
   nextImage(item: any) {
     if (!item.images || item.images.length <= 1) return;
     item.currentImageIndex = (item.currentImageIndex + 1) % item.images.length;
@@ -77,7 +73,7 @@ export class UserProfileComponent implements OnInit {
       (item.currentImageIndex - 1 + item.images.length) % item.images.length;
   }
 
-  // 5️⃣ Update modal handlers
+  
   openUpdateModal(item: any) {
     this.selectedItem = item;
     this.showUpdateModal = true;

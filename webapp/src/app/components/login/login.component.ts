@@ -37,8 +37,8 @@ export class Login {
         let errorMessage = "Invalid username or password.";
 
         this.snackBar.open(errorMessage, "Close", {
-          duration: 5000, // Keep error messages on screen a bit longer
-          panelClass: ['error-snackbar'] // Optional: A class for custom styling
+          duration: 5000,
+          panelClass: ['error-snackbar'] 
         });
       }
     });

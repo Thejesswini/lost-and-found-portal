@@ -7,21 +7,14 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 const {verifyToken} = require("../middleware/auth-middleware");
 
-// CREATE - Add new item
 router.post('/', upload.array('images'), verifyToken, async (req, res) => {
   console.log(req.body);
   console.log(res.body);
-  // try {
-  //   const item = new Item(req.body);
-  //   await item.save();
-  //   res.status(201).json(item);
-  // } catch (error) {
-  //   res.status(500).json({ message: 'Error creating item', error });
-  // }
+
   try {
     console.log('POST /items called');
 
-    // Convert uploaded images to base64
+    
     const imageBase64 = req.files && req.files.length > 0
   ? req.files.map(file => file.buffer.toString('base64'))
   : [];
@@ -47,8 +40,8 @@ router.post('/', upload.array('images'), verifyToken, async (req, res) => {
     res.status(500).json({ message: 'Error adding item', error });
 }});
 
-// READ - Get all items
-router.get('/', async (req, res) => {
+
+router.get('/', verifyToken, async (req, res) => {
   try {
     const items = await Item.find();
     res.status(200).json(items);
@@ -57,13 +50,13 @@ router.get('/', async (req, res) => {
   }
 });
 
-// UPDATE - Update an item by ID
-router.put('/:id', upload.array('images'), async (req, res) => {
+
+router.put('/:id', upload.array('images'), verifyToken, async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
     if (!item) return res.status(404).json({ message: 'Item not found' });
 
-    // Update text fields
+   
     item.description = req.body.description;
     item.location = req.body.location;
     item.tag = req.body.tag;
@@ -88,8 +81,8 @@ router.put('/:id', upload.array('images'), async (req, res) => {
   }
 });
 
-// DELETE - Remove an item by ID
-router.delete('/:id', async (req, res) => {
+
+router.delete('/:id', verifyToken, async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -103,12 +96,12 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// GET single item by ID — place this BEFORE the /:userid route
+
 router.get("/id/:id", async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
     if (!item) return res.status(404).json({ message: "Item not found" });
-    res.json(item); // send the single item object
+    res.json(item); 
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
